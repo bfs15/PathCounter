@@ -1,22 +1,32 @@
+SRC = src/
+
 bin = conta-caminhos
+Path = Path
+
+OBJS = $(SRC)$(Path).o $(SRC)$(bin).o
+
+LIBS = -lcgraph
 
 # All Target
 all: $(bin)
 
 # Tool invocations
-$(bin): $(bin).o
+$(bin): $(OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++  -o "$(bin)"  ./src/$(bin).o   -lcgraph
+	g++  -o "conta-caminhos" $(OBJS) $(LIBS) -std=c++11
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-$(bin).o:
+$(SRC)$(bin).o:
 	g++ -O3 -Wall -Wextra -c -fmessage-length=0 -std=c++11 -MMD -MP \
-	-MF"src/$(bin).d" \
-	-MT"src/$(bin).o" \
-	-o "src/$(bin).o" \
-	"src/$(bin).cpp"
+	-MF"$(SRC)$(bin).d" -MT"$(SRC)$(bin).o" -o "$(SRC)$(bin).o" \
+	"$(SRC)$(bin).cpp"
+
+$(SRC)$(Path).o:
+	g++ -O3 -Wall -Wextra -c -fmessage-length=0 -std=c++11 -MMD -MP \
+	-MF"$(SRC)$(Path).d" -MT"$(SRC)$(Path).o" -o "$(SRC)$(Path).o" \
+	"$(SRC)$(Path).cpp"
 
 clean:
-	rm -rf  ./src/*.o  ./src/*.d  $(bin)
+	rm -rf  ./$(SRC)*.o  ./$(SRC)*.d  $(bin)
