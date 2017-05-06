@@ -4,21 +4,46 @@ Trabalho de Implementação 2
 
 CI065 / CI755 - Algoritmos e Teoria dos Grafos
 
-Bruno Freitas Serbena 20151343
-Michel Melo de Souza 2015
+Bruno Freitas Serbena GRR20151343
+Michel Melo de Souza GRR20159342
 
 O algoritmo criado pelo grupo funciona da seguinte maneira:
 
-Existe uma classe chamada Path que armazena nodo e atributo;
+Existe uma classe chamada Path.
+Objetos armazenam o valor de atributos.
+A classe possui uma fila de nodos (estática);
 
-O algoritmo percorre os nodos do grafo pegando todos que tem atributo (sumidouros), empilha eles e seus atributos numa pilha de "Path"s;
+O algoritmo percorre os nodos do grafo pegando todos que tem atributo (sumidouros), coloca eles em uma fila de nodos "Q";
 
-Enquanto a pilha não for vazia:
-	Retira o primeiro Path dela, "X";
-	O algoritmo cria uma lista de Paths, cada path "L", sendo L.nodo os nodos pais de X.nodo, e L.atributo = X.atributo. Coloca esses Paths em uma lista temporária; //(quando o nodo não tem pais não se coloca nada, para condiçao de saída do laço é necessário não ter ciclos)
-		Percorre essa lista com Paths "L" e incrementa + 1 no L.atributo de cada L.nodo, eles recebem X.atributo valendo 1 se ele não já existir;
-	Cada Path da lista, os "L"s, são colocado na pilha principal;
+Enquanto a fila não for vazia =>
+	Retira o primeiro nodo dela, "X";
+	Itera os pais de X =>
+		Chama "Vai para cima" nesse pai, "P" {
+			Caso esse pai já tenha sido processado {
+				retorna; ou seja "vai para cima" no proximo P;
+			} Do contrário {
+				Um Path é criado em P; ou seja é marcado como processado;
+				Para calcular path de P:
+				Itera todos os filhos de P, "F" =>
+				(um deles será X, que já foi processado)
+					Chama P.path."Processo de Soma"(F) =>
+						Se F foi processado {
+							adiciona path de F em path que chamou;
+						} Senão {
+							F é marcado como processado;
+							Itera nos filhos de F =>
+								Chama F.path."Processo de Soma" em filhos de F para calcular path de F;
+							Se nodo filho possuir algum outro pai que não o pai que chamou a função {
+								F é adicionado a fila de nodos;
+							}
+							adiciona path de F em path que chamou;
+						}
+			}
+			chama "Vai para cima" nos pais desse pai;
 	loop;
 
-Imprime o resultado:
-Para cada nodo imprime seu nome e os atributos que tem valor maior que 0, em seguida imprime as arestas que saem do nodo;
+Imprime o resultado =>
+	Para cada nodo:
+		Setta o valor de seus atributos de maneira a eles ficarem iguais ao do seu path;
+		Imprime seu nome e os atributos que tem valor maior que 0;
+		Imprime as arestas que saem do nodo;
