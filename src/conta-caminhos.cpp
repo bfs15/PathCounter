@@ -62,13 +62,15 @@ void goUp (Agraph_t* g, Agnode_t* node) {
 }
 
 
-int charsToInt(char* s) {
+unsigned long long charsToInt(char* s, bool& hasInt) {
 	char* pEnd;
-	return strtol(s, &pEnd, 10);
+	unsigned long long ret = strtoull(s, &pEnd, 10);
+	hasInt = (pEnd != s);
+	return ret;
 }
 
-int attrIntFromNode(Agnode_t* node, Agsym_t* attribute) {
-	return charsToInt(agxget(node, attribute));
+unsigned long long attrIntFromNode(Agnode_t* node, Agsym_t* attribute, bool& hasAttr) {
+	return charsToInt(agxget(node, attribute), hasAttr);
 }
 
 

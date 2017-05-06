@@ -6,7 +6,7 @@ namespace std {
 queue<Agnode_t*>  Path::nodeQueue;
 
 void Path::pathAdd(Path* p) {
-	map<Agsym_t*, int>::iterator it;
+	map<Agsym_t*, unsigned long long>::iterator it;
 	for (it = p->pathsN.begin(); it!= p->pathsN.end(); ++it) {
 		pathsN[it->first] += it->second;
 	}
@@ -53,12 +53,13 @@ void Path::pathAddProcess (Agraph_t* g, Agnode_t* father, Agnode_t* son) {
 // static
 Path* Path::pathSet(Agraph_t* g, Agnode_t* node) {
 	Path* path = Path::pathFromNode(node);
+	bool hasAttr;
 
 	Agsym_t* attribute = NULL;
 	while ((attribute = agnxtattr(g, AGNODE, attribute))) {
-		int value = attrIntFromNode(node, attribute);
+		unsigned long long value = attrIntFromNode(node, attribute, hasAttr);
 
-		if (value > 0) {
+		if (hasAttr) {
 			if (path == NULL) {
 				path = Path::pathCreateOnNode(node);
 			}
@@ -99,13 +100,13 @@ void Path::pushLabeled(Agraph_t* g) {
 
 // Attribute handling ////////
 
-void Path::attributeSet(Agnode_t* node, Agsym_t* attribute, int value) {
+void Path::attributeSet(Agnode_t* node, Agsym_t* attribute, unsigned long long value) {
 	string valueStr = to_string(value);
 	agxset(node, attribute, (char *)valueStr.c_str());
 }
 
 void Path::attrSync(Agnode_t* node) {
-	map<Agsym_t*, int>::iterator it;
+	map<Agsym_t*, unsigned long long>::iterator it;
 	for (it = pathsN.begin(); it!= pathsN.end(); ++it) {
 		attributeSet(node, it->first, it->second);
 	}
@@ -114,8 +115,7 @@ void Path::attrSync(Agnode_t* node) {
 // Print ////////
 
 void Path::printPath() {
-	map<Agsym_t*, int>::iterator it;
-
+	map<Agsym_t*, unsigned long long>::iterator it;
 	for (it = pathsN.begin(); it!= pathsN.end(); ++it) {
 		cout << it->first->name <<"="<< it->second << " | ";
 	}
@@ -132,14 +132,16 @@ void Path::printNodeDot(Agraph_t* g, Agnode_t* node) {
 		cout << "\t" << agnameof(node) << " [" ;
 
 		Agsym_t* attribute = NULL;
-		int attrN = 0;
+		unsigned long long attrN = 0;
+		bool hasAttr;
+
 		while ((attribute = agnxtattr(g, AGNODE, attribute))) {
-			int value = attrIntFromNode(node, attribute);
-			if (value != 0) { // prints only if value is meaningful
-				attrN++;
-				if (attrN > 1) {
+			unsigned long long value = attrIntFromNode(node, attribute, hasAttr);
+			if (hasAttr) { // prints only if value is meaningful
+				if (attrN > 0) {
 					cout << "," ;
 				}
+				attrN++;
 				cout << attribute->name << "=" << value;
 			}
 		}

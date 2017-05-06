@@ -17,9 +17,9 @@
 void goUp (Agraph_t* g, Agnode_t* node);
 
 
-int charsToInt(char* s);
+unsigned long long charsToInt(char* s);
 
-int attrIntFromNode(Agnode_t* node, Agsym_t* attribute);
+unsigned long long attrIntFromNode(Agnode_t* node, Agsym_t* attribute, bool& hasAttr);
 
 
 void outAsDot(Agraph_t* g);

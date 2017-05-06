@@ -17,7 +17,7 @@ namespace std {
 class Path {
 public:
 	Agrec_t h;
-	std::map<Agsym_t*, int> pathsN;
+	std::map<Agsym_t*, unsigned long long> pathsN;
 
 	static
 	queue<Agnode_t*> nodeQueue;
@@ -60,7 +60,7 @@ public:
 	/**
 	 * sets node attribute to value
 	 */
-	void attributeSet(Agnode_t* node, Agsym_t* attribute, int value);
+	void attributeSet(Agnode_t* node, Agsym_t* attribute, unsigned long long value);
 
 	/**
 	 * sets node attributes to the values of it's path
