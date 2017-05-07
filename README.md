@@ -10,7 +10,7 @@ Michel Melo de Souza GRR20159342
 O algoritmo criado pelo grupo funciona da seguinte maneira:
 
 Existe uma classe chamada Path.
-Objetos armazenam o valor de atributos.
+Objetos Path armazenam o valor de atributos.
 A classe possui uma fila de nodos (estática);
 
 O algoritmo percorre os nodos do grafo pegando todos que tem atributo (sumidouros), coloca eles em uma fila de nodos "Q";
@@ -26,21 +26,26 @@ Enquanto a fila não for vazia =>
 				Para calcular path de P:
 				Itera todos os filhos de P, "F" =>
 				(um deles será X, que já foi processado)
-					Chama P.path."Processo de Soma"(F) =>
+					Chama P.path."Processo de Soma"(F) {
 						Se F foi processado {
 							adiciona path de F em path que chamou;
 						} Senão {
 							F é marcado como processado;
 							Itera nos filhos de F =>
 								Chama F.path."Processo de Soma" em filhos de F para calcular path de F;
+								(loop recursivo)
 							Se nodo filho possuir algum outro pai que não o pai que chamou a função {
 								F é adicionado a fila de nodos;
 							}
 							adiciona path de F em path que chamou;
 						}
+					}
+				loop;
 			}
 			chama "Vai para cima" nos pais desse pai;
+		}
 	loop;
+loop;
 
 Imprime o resultado =>
 	Para cada nodo:
