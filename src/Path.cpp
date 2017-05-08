@@ -126,10 +126,12 @@ void Path::printPath() {
 void Path::printNodeDot(Agraph_t* g, Agnode_t* node) {
 	Path* path = Path::pathFromNode(node);
 
+	cout <<"\t"<< agnameof(node);
+
 	if(path != NULL) {
 		path->attrSync(node);
 
-		cout << "\t" << agnameof(node) << " [" ;
+		cout <<" [";
 
 		Agsym_t* attribute = NULL;
 		unsigned long long attrN = 0;
